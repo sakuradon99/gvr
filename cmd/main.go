@@ -7,6 +7,7 @@ import (
 	"regexp"
 	"sort"
 	"strconv"
+	"strings"
 )
 
 var majorFlag = flag.Bool("m", false, "increase major version")
@@ -26,7 +27,10 @@ func run() error {
 		return err
 	}
 
-	fmt.Println(status)
+	if !strings.Contains(status, "nothing to commit, working tree clean") {
+		fmt.Println("has uncommitted changes")
+		return nil
+	}
 
 	var versions []version
 
