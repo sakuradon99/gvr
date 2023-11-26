@@ -72,7 +72,7 @@ func run() error {
 			}
 			return versions[i].patch > versions[j].patch
 		})
-		latestVersion = versions[0]
+		latestVersion = versions[len(versions)-1]
 	}
 
 	headHash, err := git.HeadHash()
