@@ -15,8 +15,20 @@ func gitCommand(args ...string) (string, error) {
 	return string(output), nil
 }
 
-func Status() (string, error) {
-	return gitCommand("status")
+func HasChangeNotCommit() (bool, error) {
+	raw, err := gitCommand("status", "--porcelain")
+	if err != nil {
+		return false, err
+	}
+	return raw != "", nil
+}
+
+func HasCommitNotPushed() (bool, error) {
+	raw, err := gitCommand("cherry", "-v")
+	if err != nil {
+		return false, err
+	}
+	return raw != "", nil
 }
 
 func FetchTags() error {

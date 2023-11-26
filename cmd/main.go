@@ -22,14 +22,22 @@ func main() {
 }
 
 func run() error {
-	status, err := git.Status()
+	notCommit, err := git.HasChangeNotCommit()
 	if err != nil {
 		return err
 	}
-
-	if !strings.Contains(status, "nothing to commit, working tree clean") {
+	if notCommit {
 		fmt.Println("has uncommitted changes")
-		//return nil
+		return nil
+	}
+
+	notPushed, err := git.HasCommitNotPushed()
+	if err != nil {
+		return err
+	}
+	if notPushed {
+		fmt.Println("has commit not pushed")
+		return nil
 	}
 
 	err = git.FetchTags()
