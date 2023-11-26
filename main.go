@@ -22,6 +22,11 @@ func main() {
 }
 
 func run() error {
+	if !git.IsGitRepo() {
+		fmt.Println("not a git repository")
+		return nil
+	}
+
 	notCommit, err := git.HasChangeNotCommit()
 	if err != nil {
 		return err

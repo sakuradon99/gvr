@@ -15,6 +15,11 @@ func gitCommand(args ...string) (string, error) {
 	return string(output), nil
 }
 
+func IsGitRepo() bool {
+	_, err := gitCommand("status")
+	return err == nil
+}
+
 func HasChangeNotCommit() (bool, error) {
 	raw, err := gitCommand("status", "--porcelain")
 	if err != nil {
