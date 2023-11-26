@@ -29,10 +29,29 @@ func run() error {
 
 	if !strings.Contains(status, "nothing to commit, working tree clean") {
 		fmt.Println("has uncommitted changes")
-		return nil
+		//return nil
+	}
+
+	err = git.FetchTags()
+	if err != nil {
+		return err
 	}
 
 	var versions []version
+	tagList, err := git.ListTag()
+	for _, tagStr := range tagList {
+		tagStr = strings.TrimSpace(tagStr)
+		if tagStr == "" {
+			continue
+		}
+
+		v, ok := parseVersion(tagStr)
+		if !ok {
+			continue
+		}
+
+		versions = append(versions, v)
+	}
 
 	var latestVersion version
 	if len(versions) > 0 {
@@ -46,6 +65,19 @@ func run() error {
 			return versions[i].patch > versions[j].patch
 		})
 		latestVersion = versions[0]
+	}
+
+	headHash, err := git.HeadHash()
+	if err != nil {
+		return err
+	}
+	latestHash, err := git.TagHash(latestVersion.String())
+	if err != nil {
+		return err
+	}
+	if headHash == latestHash {
+		fmt.Println("already latest version")
+		return nil
 	}
 
 	newVersion := latestVersion
@@ -69,6 +101,9 @@ func run() error {
 	if userInput != "Y" {
 		return nil
 	}
+
+	err = git.CreatTag(newVersion.String())
+	fmt.Println("tag created: " + newVersion.String())
 
 	return nil
 }
