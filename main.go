@@ -3,7 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
-	"gvr/internal/git"
+	"github.com/sakuradon99/gvr/internal/git"
 	"regexp"
 	"sort"
 	"strconv"
