@@ -45,3 +45,11 @@ func TagHash(name string) (string, error) {
 func HeadHash() (string, error) {
 	return gitCommand("rev-parse", "HEAD")
 }
+
+func PushTag(name string) error {
+	_, err := gitCommand("push", "origin", name)
+	if err != nil {
+		return err
+	}
+	return nil
+}

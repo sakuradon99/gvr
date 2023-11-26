@@ -105,6 +105,12 @@ func run() error {
 	err = git.CreatTag(newVersion.String())
 	fmt.Println("tag created: " + newVersion.String())
 
+	err = git.PushTag(newVersion.String())
+	if err != nil {
+		return err
+	}
+	fmt.Println("tag pushed")
+
 	return nil
 }
 
